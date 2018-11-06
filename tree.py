@@ -1,4 +1,10 @@
 def visualise(root):
+    #https://stackoverflow.com/questions/287871/print-in-terminal-with-colors
+    from termcolor import colored
+    
+    RED = 1
+    BLACK = 2
+            
     from math import log as ln
     log2 = lambda x : ln(x)/ln(2)
     
@@ -9,6 +15,7 @@ def visualise(root):
             self.data = node.data
             self.right = node.right
             self.left = node.left
+            self.color = node.color
 
     def r_wrap(root):      #implements idea of hamming distance.
         def _wrap(node, data):
@@ -38,9 +45,9 @@ def visualise(root):
     }
     slash_pattern = [1, 4, 8, 18, 36][::-1]
     hat_difference = [None, 73, 34, 16, 6, 0]
-    root = r_wrap(root)       # after this, you can use any traversal and you can get level_order traversal.
+    root = r_wrap(root)       # after this, you can use any damn traversal and you can get level_order traversal.
     level_order = sorted(inorder(root, []), key = lambda x : int(x.n, 2)) #directly sort without following loops.
-    level_order = {int(node.n, 2) : node.data   for node in level_order}
+    level_order = {int(node.n, 2) : node   for node in level_order}
     height_tree = __import__("math").ceil(log2(max(level_order.keys())))
 
     k = 1
@@ -62,10 +69,13 @@ def visualise(root):
         print(" ", end='')    #pattern offset
         for j in range(n_nodes):
             try :
-                data =  level_order[k]
+                if level_order[k].color == RED : color = 'red'
+                else : color = 'green'
+                data =  level_order[k].data
                 if len(str(data)) < 2 : data = "0"+str(data)
+                data = colored(data, color)
                 print((pattern[i+dh][j])*" ", data, end="", sep="")
-            except : 
+            except:
                 print((pattern[i+dh][j])*" ", "--", end="", sep="")
             k += 1
         print()
@@ -82,17 +92,20 @@ def visualise(root):
 
 
 if __name__ == "__main__":
+    RED = 1
+    BLACK = 2
     class Node:
-        def __init__(self, data):
+        def __init__(self, data, color=RED):
             self.data = data
             self.right = None
             self.left = None
-    root = Node(8)
+            self.color = color
+    root = Node(8, BLACK)
     root.right = Node(10)
     root.left = Node(3)
     
-    root.left.left = Node(1)
-    root.left.right = Node(6)
+    root.left.left = Node(1, BLACK)
+    root.left.right = Node(6, BLACK)
     root.left.right.left = Node(4)
     root.left.right.right = Node(7)
     
