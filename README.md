@@ -1,6 +1,6 @@
 # Trees
 
-In case You want to visualise a tree of height upto 5 max with node structure defined as : 
+In case You want to visualise a tree of height upto 4 max with node structure defined as : 
 
 ```
     class Node:
